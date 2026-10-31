@@ -31,7 +31,7 @@ When an agent works while you sleep, the hard part is not writing the code. It i
 | `doctor` | Self-check of the tools and the factory data. |
 | `deliver-task` skill | The one-task loop: claim, branch, implement, verify, review, PR, record. |
 | Agents | `implementer` and `reviewer` (Sonnet), `architect` (Opus, for rare hard calls). |
-| Guard hook | PreToolUse hook on Bash. It blocks force-push, pushes to main, branch deletion, merges, publishing, production deploys and history-destroying commands. Merging opens only in a session the owner started with `FACTORY_ALLOW_MERGE=1`. |
+| Guard hook | PreToolUse hook on Bash. It blocks force-push, pushes to main, branch deletion, merges, publishing, production deploys and history-destroying commands. Merging opens only in a session the owner started with `FACTORY_ALLOW_MERGE=1 FACTORY_MERGE_OWNER=<owner>`. |
 | Secret scan | Pre-commit hook over staged changes. It reports the file and the pattern, never the value. |
 | CI | GitHub Actions running the test suite. |
 

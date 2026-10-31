@@ -132,3 +132,20 @@ test('the gate needs a valid owner: none or a malformed one keeps merges blocked
   assert.ok(check('gh api -X PUT repos/acme/x/pulls/12/merge -f merge_method=squash', { env: { FACTORY_ALLOW_MERGE: '1' }, owner: '' }));
   assert.equal(check(merge, { env: { FACTORY_ALLOW_MERGE: '1', FACTORY_MERGE_OWNER: 'acme' } }), null, 'owner from the environment');
 });
+
+test('the merge scope never comes from a repo file, only from the launching environment', () => {
+  const hook = fileURLToPath(new URL('../scripts/hooks/guard-bash.mjs', import.meta.url));
+  const run = (command, env) => spawnSync('node', [hook], {
+    input: JSON.stringify({ tool_input: { command } }), encoding: 'utf8', env: { PATH: process.env.PATH, ...env },
+  });
+  // gate open but no owner in the environment: blocked, whatever factory/registry.json says
+  assert.equal(run('gh pr merge 12 --squash --repo acme/x', { FACTORY_ALLOW_MERGE: '1' }).status, 2);
+  assert.equal(run('gh pr merge 12 --squash --repo acme/x', { FACTORY_ALLOW_MERGE: '1', FACTORY_MERGE_OWNER: 'acme' }).status, 0);
+});
+
+test('line continuations are joined like the shell does (no space)', () => {
+  assert.ok(check('gh pr mer\\\nge 12 --squash --repo acme/x --admin', open), 'mer<continuation>ge is merge');
+  assert.ok(check('gh pr mer\\\nge 12 --squash', closed));
+  assert.ok(check('git pu\\\nsh origin main', closed));
+  assert.equal(check('git push -u origin \\\nclaude/f-001-x', closed), null, 'a continuation between words is fine');
+});

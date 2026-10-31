@@ -8,7 +8,7 @@ First public version, extracted from a private factory that has been running rea
 - `deliver-task` skill, plus `implementer`, `reviewer` and `architect` agents.
 - Bash guard hook:
   - quote, heredoc and substitution aware;
-  - an owner-session merge gate (`FACTORY_ALLOW_MERGE=1`, scoped to the configured owner, squash only);
+  - an owner-session merge gate (`FACTORY_ALLOW_MERGE=1` plus `FACTORY_MERGE_OWNER`, both from the launching environment; squash only);
   - a `gh api` write policy: create a PR, comment on it, edit its title or body.
 - Pre-commit secret scan.
 - Field report #001: the first unattended run and the guard fixes that came out of it.
