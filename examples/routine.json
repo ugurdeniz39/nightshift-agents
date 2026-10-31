@@ -1,0 +1,26 @@
+{
+  "name": "nightshift-weekday-morning",
+  "cron_expression": "17 4 * * 1-5",
+  "enabled": true,
+  "job_config": {
+    "ccr": {
+      "environment_id": "<your cloud environment id>",
+      "session_context": {
+        "model": "claude-sonnet-5-5",
+        "sources": [{ "git_repository": { "url": "https://github.com/<owner>/<repo>" } }],
+        "allowed_tools": ["Bash", "Read", "Write", "Edit", "Glob", "Grep"]
+      },
+      "events": [
+        {
+          "data": {
+            "uuid": "<a fresh lowercase uuid v4>",
+            "session_id": "",
+            "type": "user",
+            "parent_tool_use_id": null,
+            "message": { "role": "user", "content": "<the text of examples/routine-prompt.md>" }
+          }
+        }
+      ]
+    }
+  }
+}

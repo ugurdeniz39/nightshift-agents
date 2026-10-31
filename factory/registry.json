@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "owner": null,
+  "policy": {
+    "maxWip": 2,
+    "branchPrefix": "claude/",
+    "autoMerge": false,
+    "forcePush": false,
+    "productionDeploy": "requires-approval",
+    "newReposPrivate": true
+  },
+  "projects": []
+}

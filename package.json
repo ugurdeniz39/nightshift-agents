@@ -1,0 +1,17 @@
+{
+  "name": "nightshift-agents",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Scheduled Claude Code agents that take one task from a backlog, open a pull request with real test evidence, and never merge or deploy on their own.",
+  "keywords": ["claude-code", "ai-agents", "autonomous-agents", "scheduled-tasks", "github", "pull-requests", "guardrails", "hooks", "backlog"],
+  "license": "MIT",
+  "author": "Yuroka Studio",
+  "repository": { "type": "git", "url": "https://github.com/yuroka-studio/nightshift-agents.git" },
+  "bin": { "factory": "bin/factory.mjs" },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "factory": "node bin/factory.mjs"
+  },
+  "engines": { "node": ">=22" }
+}

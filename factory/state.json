@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "updated": null,
+  "building": "Describe what this repository is building, in one sentence.",
+  "automation": {
+    "scheduled": "not-configured",
+    "note": "No scheduled run has fired yet."
+  },
+  "verified": [],
+  "failed": [],
+  "blockers": [],
+  "notes": []
+}

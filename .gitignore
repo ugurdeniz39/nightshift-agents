@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+*.pem
+*.p12
+*.jks
+*.keystore
+*.log
+.claude/settings.local.json
+.claude/worktrees/

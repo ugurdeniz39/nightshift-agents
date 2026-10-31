@@ -1,0 +1,4 @@
+#!/bin/sh
+# Installed per repo via `git config core.hooksPath <path-to>/scripts/hooks` (see docs/runbook.md).
+# Resolve the scanner next to this hook, not inside the repo being committed, so it also works for other repos.
+exec node "$(dirname "$0")/secret-scan.mjs"
