@@ -92,6 +92,15 @@ test('guard blocks the actions the owner reserved for approval', () => {
     'git --git-dir .git commit -n -m x',
     'git -P commit --no-veri -m x',
     'git --no-pager commit -an -m x',
+    // escapes and quotes the shell removes
+    'git pu\\sh origin main',
+    'g\\it push origin main',
+    'git "push" origin main',
+    'git com\\mit -n',
+    'git "commit" --no-veri -m x',
+    'git c\\onfig alias.p push',
+    'gh a\\pi -X DELETE repos/me/x/git/refs/heads/claude/x',
+    'git push origin \\\nmain',
     'git push --del origin claude/x',
     'git push --forc origin claude/x',
     'git push --force-with origin claude/x',
@@ -254,4 +263,26 @@ test('pre-commit hook blocks a staged secret in a real throwaway repo and passes
   assert.match(r.stderr, /secret-scan: commit blocked/);
   assert.match(r.stderr, /github-token/);
   assert.ok(!r.stderr.includes(fake.gh), 'the secret itself must never be printed');
+});
+
+test('crafted option chains cannot make the guard hang (no catastrophic backtracking)', () => {
+  const evil = [
+    `git ${'--git-dir '.repeat(40)}x`,
+    `git ${'--git-dir --git-dir '.repeat(25)}push origin main`,
+    `git ${'-c x '.repeat(60)}commit`,
+  ];
+  for (const c of evil) {
+    const t0 = process.hrtime.bigint();
+    check(c, { env: {} });
+    const ms = Number(process.hrtime.bigint() - t0) / 1e6;
+    assert.ok(ms < 250, `took ${ms.toFixed(1)} ms: ${c.slice(0, 40)}...`);
+  }
+  assert.match(check('x'.repeat(100_001), { env: {} }) ?? '', /too long/);
+});
+
+test('the hook blocks when the guard itself throws (fail closed)', () => {
+  const hook = join(root, 'scripts/hooks/guard-bash.mjs');
+  const r = spawnSync('node', [hook], { input: JSON.stringify({ tool_input: { command: 123 } }), encoding: 'utf8' });
+  assert.equal(r.status, 2);
+  assert.match(r.stderr, /guard error .* blocked to be safe/);
 });

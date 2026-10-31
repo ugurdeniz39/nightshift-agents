@@ -22,7 +22,12 @@ try {
   process.exit(0); // unparsable hook input must never wedge the session
 }
 
-const reason = check(command, { env: process.env, owner: process.env.FACTORY_MERGE_OWNER ?? registryOwner() });
+let reason;
+try {
+  reason = check(command, { env: process.env, owner: process.env.FACTORY_MERGE_OWNER ?? registryOwner() });
+} catch (e) {
+  reason = `guard error (${e.message}); blocked to be safe`; // an internal error must not let the command through
+}
 if (reason) {
   process.stderr.write(`factory guard: blocked. ${reason}.\n`);
   process.exit(2);
