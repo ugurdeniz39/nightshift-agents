@@ -22,7 +22,7 @@ Follow the `deliver-task` skill. One task = one branch `claude/<id>-<slug>` = on
 
 ## Hard rules
 - Never force-push, delete remote branches, merge PRs, push to main/master, deploy to production, publish packages, or make a repo public. `scripts/hooks/guard-bash.mjs` blocks the obvious forms; never look for ways around it.
-- Merging has one exception: a session the owner started inside this repo with `FACTORY_ALLOW_MERGE=1 FACTORY_MERGE_OWNER=<owner>` (both are read from the hook's environment; nothing in the repo can set them). Even then, only PRs with green CI, a clean merge state and an independent review, `--squash` only, with the repo named explicitly. If a merge is blocked, ask the owner.
+- Merging has one exception: a session the owner started inside this repo with `FACTORY_ALLOW_MERGE=1 FACTORY_MERGE_OWNER=<owner>` (both are read from the hook's environment; nothing in the repo can set them). Even then, only PRs with green CI, a clean merge state and an independent review, `--squash` only, with the repo named explicitly. If a merge is blocked (by the guard or by Claude Code's own permission layer), ask the owner.
 - A task reaches `in_review` only with real evidence: pass the actual test output to `factory submit --evidence`. No evidence, no delivery claim. Docs-only, scaffold-only or untested changes are not deliverables.
 - Never weaken or delete a test to make it pass. At most 3 fix attempts per failure, then `factory block` with the reason, and stop.
 - Secrets never go into commits, logs, reports or PRs. The pre-commit hook scans staged changes; never bypass it.

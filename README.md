@@ -9,7 +9,7 @@
 
 > Unofficial community project. Not affiliated with or endorsed by Anthropic.
 
-Nightshift is a small, file-based "software factory" for running [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) unattended against a backlog. It is about 1,500 lines of dependency-free Node, one skill, three agent definitions and a Bash guard hook. It was built by running real unattended agents and writing down what broke. The [field report](docs/field-report-001.md) has the numbers.
+Nightshift is a small, file-based "software factory" for running [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) unattended against a backlog. It is about 1,300 lines of dependency-free Node, one skill, three agent definitions and a Bash guard hook. It was built by running real unattended agents and writing down what broke. The [field report](docs/field-report-001.md) has the numbers.
 
 ## Why
 
@@ -31,7 +31,7 @@ When an agent works while you sleep, the hard part is not writing the code. It i
 | `doctor` | Self-check of the tools and the factory data. |
 | `deliver-task` skill | The one-task loop: claim, branch, implement, verify, review, PR, record. |
 | Agents | `implementer` and `reviewer` (Sonnet), `architect` (Opus, for rare hard calls). |
-| Guard hook | PreToolUse hook on Bash. It blocks force-push, pushes to main, branch deletion, merges, publishing, production deploys and history-destroying commands. Merging opens only in a session the owner started with `FACTORY_ALLOW_MERGE=1 FACTORY_MERGE_OWNER=<owner>`. |
+| Guard hook | PreToolUse hook on Bash. It blocks force-push, pushes to main, branch deletion, merges, publishing, production deploys and history-destroying commands. Merging opens only in a session the owner started with `FACTORY_ALLOW_MERGE=1 FACTORY_MERGE_OWNER=<owner>` (Claude Code's own permission layer may still refuse; the full flow is unverified). |
 | Secret scan | Pre-commit hook over staged changes. It reports the file and the pattern, never the value. |
 | CI | GitHub Actions running the test suite. |
 

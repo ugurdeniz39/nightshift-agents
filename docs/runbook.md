@@ -29,7 +29,7 @@ A schedule counts as working only once a scheduled fire has produced a PR you ch
 
 ## Owner-only steps
 - **GitHub access for cloud runs:** connect GitHub to Claude Code on the web. The Claude GitHub App restricted to this repo is the narrowest option.
-- **Merging:** in the GitHub UI, or let a session you started inside the repo with `FACTORY_ALLOW_MERGE=1 FACTORY_MERGE_OWNER=<you> claude` squash-merge PRs with green CI.
+- **Merging:** in the GitHub UI, or let a session you started inside the repo with `FACTORY_ALLOW_MERGE=1 FACTORY_MERGE_OWNER=<you> claude` squash-merge PRs with green CI. Unverified end to end: the environment variables open the *guard*, but Claude Code's own permission layer (for example the auto-mode classifier) can still refuse or prompt for a merge; on 2026-10-31 it refused one.
 - **Production deploys, rotating keys, billing:** always yours.
 - **`workflow` token scope:** if pushing `.github/workflows/*` is rejected, run `gh auth refresh -s workflow`.
 

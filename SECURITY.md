@@ -19,6 +19,6 @@ Use GitHub branch protection and least-privilege tokens wherever your plan allow
 
 ## Reporting a vulnerability
 
-Please use GitHub's private vulnerability reporting on this repository (Security tab, "Report a vulnerability"). Do not open a public issue for a bypass. A useful report includes the exact command, what the guard returned, and what the shell would actually run.
+If private vulnerability reporting is enabled on this repository (Security tab, "Report a vulnerability"), please use it. Otherwise open an issue that only asks for a private contact, without details. Do not post a bypass publicly. A useful report includes the exact command, what the guard returned, and what the shell would actually run.
 
 Bypasses of the guard that let an agent force-push, push to main, merge, delete branches or publish are in scope, and so are leaks of secret values by the secret scanner or the report command.

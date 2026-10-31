@@ -12,4 +12,4 @@ First public version, extracted from a private factory that has been running rea
   - a `gh api` write policy: create a PR, comment on it, edit its title or body.
 - Pre-commit secret scan.
 - Field report #001: the first unattended run and the guard fixes that came out of it.
-- 77 tests, zero dependencies, Node >= 22.
+- 81 tests, zero dependencies, Node >= 22.
