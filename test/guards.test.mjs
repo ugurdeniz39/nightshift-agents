@@ -78,6 +78,20 @@ test('guard blocks the actions the owner reserved for approval', () => {
     'gh api repos/me/x/pulls repos/me/y/contents -f a=b',
     'gh api --frobnicate repos/me/x/pulls',
     'xargs gh api repos/me/x/merges -f base=main',
+    // bundled short flags and long-option abbreviations
+    'git commit -anm "fix things"',
+    'git commit -nm x',
+    'git commit -am x -n',
+    'git commit --no-veri -m x',
+    'git commit --no-verif -m x',
+    'git push --del origin claude/x',
+    'git push --forc origin claude/x',
+    'git push --force-with origin claude/x',
+    'git push --mir origin',
+    'git push --tag origin',
+    'git push --follow origin claude/x',
+    'git push --frobnicate origin claude/x',
+    'git push -o ci.skip origin claude/x',
     // case-insensitive file systems, aliases/config, quotes and substitutions (F-004 round 2)
     'GIT push origin main',
     '/USR/BIN/GIT push origin main',
@@ -153,6 +167,13 @@ test('guard allows the normal delivery flow', () => {
     'git commit -m "$(cat <<\'EOF\'\nmessage with \'single\' and "double" quotes; it is fine\nEOF\n)"',
     'gh api repos/me/x/pulls -f title=t -F body=@/tmp/body.md --jq .html_url',
     'gh api repos/me/x/issues/12/comments -F body=@/tmp/comment.md --jq .html_url',
+    // legitimate commit and push forms that must survive the stricter parsing
+    'git commit -am "fix: n things and no verify talk"',
+    'git commit --no-edit',
+    'git commit --verbose -m x',
+    'git push --set-upstream origin claude/f-001-x',
+    'git push -uq origin claude/f-001-x',
+    'git push --dry-run origin claude/f-001-x',
   ];
   for (const c of allowed) assert.equal(check(c, { env: {} }), null, `should allow: ${c}`);
 });
@@ -190,8 +211,16 @@ test('blockedFile rejects env files and key material but allows .env.example', (
 });
 
 test('scanDiff only inspects added lines and reports the file', () => {
-  const diff = ['+++ b/src/a.js', `-old = ${fake.aws}`, `+new = ${fake.aws}`, '+++ b/src/b.js', '+ok = 1'].join('\n');
+  const diff = [
+    'diff --git a/src/a.js b/src/a.js', '--- a/src/a.js', '+++ b/src/a.js', '@@ -1 +1 @@', `-old = ${fake.aws}`, `+new = ${fake.aws}`,
+    'diff --git a/src/b.js b/src/b.js', '--- a/src/b.js', '+++ b/src/b.js', '@@ -0,0 +1 @@', '+ok = 1',
+  ].join('\n');
   assert.deepEqual(scanDiff(diff), [{ file: 'src/a.js', pattern: 'aws-access-key' }]);
+});
+
+test('scanDiff still scans an added line whose content starts with ++ (it looks like a +++ header)', () => {
+  const diff = ['diff --git a/x b/x', '--- a/x', '+++ b/x', '@@ -0,0 +1,2 @@', `+++ ${fake.gh}`, '+fine'].join('\n');
+  assert.deepEqual(scanDiff(diff), [{ file: 'x', pattern: 'github-token' }]);
 });
 
 test('pre-commit hook blocks a staged secret in a real throwaway repo and passes a clean one', () => {

@@ -13,6 +13,8 @@ Known gaps, by design or not yet covered:
 - a guard crash or unparsable hook input exits 0, which lets the command run;
 - hooks only load when Claude Code starts inside the repository.
 
+Known false positives (blocked although harmless): a commit message that is, or starts with, `-n` (it reads like `--no-verify`), and prose that spells out a forbidden command. Rephrase it.
+
 Use GitHub branch protection and least-privilege tokens wherever your plan allows it. Those are the real boundary.
 
 ## Reporting a vulnerability

@@ -33,7 +33,7 @@ When an agent works while you sleep, the hard part is not writing the code. It i
 | Agents | `implementer` and `reviewer` (Sonnet), `architect` (Opus, for rare hard calls). |
 | Guard hook | PreToolUse hook on Bash. It blocks force-push, pushes to main, branch deletion, merges, publishing, production deploys and history-destroying commands. Merging opens only in a session the owner started with `FACTORY_ALLOW_MERGE=1`. |
 | Secret scan | Pre-commit hook over staged changes. It reports the file and the pattern, never the value. |
-| CI | GitHub Actions running the 75-test suite. |
+| CI | GitHub Actions running the test suite. |
 
 ## How a run works
 
@@ -52,7 +52,7 @@ scheduler (cron, UTC)
 
 ```sh
 # 1. Create a repo from this template (or clone it), then inside it:
-npm test                                   # 75 tests, zero dependencies
+npm test                                   # zero dependencies, no install step
 git config core.hooksPath scripts/hooks    # turns on the pre-commit secret scan
 node bin/factory.mjs init --owner <you> --repo <you>/<repo>
 node bin/factory.mjs doctor
