@@ -76,15 +76,14 @@ Nightshift lives **inside the repository it works on**: one repo per scheduled t
 ## How a night goes
 
 ```mermaid
-flowchart LR
-    S(["scheduler<br/>cron, UTC"]) --> C["fresh cloud session<br/>clones the repo"]
-    C --> N{"factory next<br/>--check-remote"}
+flowchart TD
+    S(["scheduler (cron, UTC) starts a fresh cloud session"]) --> N{"factory next --check-remote"}
     N -- "nothing free" --> Z(["stop"])
-    N -- "task" --> L["factory claim<br/>pushes claude/ID-slug,<br/>the branch is the lock"]
-    L --> I["implement + run tests<br/>max 3 fix attempts"]
-    I -- "still failing" --> B(["factory block<br/>with the reason"])
-    I -- "green" --> R["reviewer agent<br/>reads the diff"]
-    R --> P["PR via REST<br/>factory submit + evidence"]
+    N -- "task" --> L["factory claim: push claude/ID-slug, the branch is the lock"]
+    L --> I["implement + run tests, max 3 fix attempts"]
+    I -- "still failing" --> B(["factory block with the reason, stop"])
+    I -- "green" --> R["reviewer agent reads the diff"]
+    R --> P["PR via REST + factory submit with the test output"]
     P --> H(["stop, a human merges"])
 ```
 
